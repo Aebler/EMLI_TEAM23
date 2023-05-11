@@ -3,9 +3,9 @@ Project/Exam for embedded linux.
 
 TASKLIST:
 
-a) The water pump must be controllable
+a) The water pump must be controllable ✅
 
-b) The described sensors must be readable
+b) The described sensors must be readable 
 
 c) The wireless remote functionality must be accessible
 
