@@ -5,7 +5,7 @@ WIFI_SSID: "EMLI_TEAM_23"
 WIFI_PASS: "ronk77qwvt33"
 SSH_PASS : "raspberry"
 
-MQQT_ID  : "EMLI23"
+MQQT_ID  : "emli23"
 MQQT_PASS: "bonk22bonk"
 
 TASKLIST:
