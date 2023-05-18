@@ -2,8 +2,8 @@
 
 # MQTT broker details
 
-TOPIC1="plantsWaterAlarm"
-TOPIC2="pumpWaterAlarm"
+TOPIC_1="plantsWaterAlarm"
+TOPIC_2="pumpWaterAlarm"
 RESULT_TOPIC="ledRed"
 
 
@@ -16,30 +16,41 @@ MQTT_PASS="bonk22bonk"
 
 # Function to publish message to MQTT topic
 publish_to_mqtt() {
-    mosquitto_pub -h $MQTT_HOST -p $MQTT_PORT -u $MQTT_USER -P $MQTT_PASS -t $RESULT_TOPIC $1
+    mosquitto_pub -h $MQTT_HOST -p $MQTT_PORT -u $MQTT_USER -P $MQTT_PASS -t $RESULT_TOPIC -m $1
 }
 
-# Function to monitor MQTT topics and publish result
-monitor_topics() {
-    while true; do
-        # Read messages from topics
-        output1=$(mosquitto_sub -h $MQTT_HOST -p $MQTT_PORT -u $MQTT_USER -P $MQTT_PASS -t $TOPIC_1)
-        output2=$(mosquitto_sub -h $MQTT_HOST -p $MQTT_PORT -u $MQTT_USER -P $MQTT_PASS -t $TOPIC_2)
-                  
 
-        # Check conditions and publish result
-        if [[ $output1 == "1" || $output2 == "1" ]]; then
+# Connect to the MQTT broker
+
+value_1="0"
+value_2="0"
+
+mosquitto_sub -h $MQTT_HOST -p $MQTT_PORT -u $MQTT_USER -P $MQTT_PASS -t $TOPIC_1 -t $TOPIC_2 -v |
+while read -r line; do
+    # Read the values from the MQTT topics
+    topic=$(echo "$line" | awk '{print $1}')
+    value=$(echo "$line" | awk '{print $2}')
+    
+    if [ $value == "(null)" ]; then
+        :
+    else
+        echo $topic
+        echo $value
+        if [ "$topic" == "$TOPIC_1" ]; then
+            value_1="$value"
+        elif [ "$topic" == "$TOPIC_2" ]; then
+            value_2="$value"
+
+        fi
+
+        # Check the values and send output to the third topic
+        if [[ "$value_1" == "1" || "$value_2" == "1" ]]; then
             publish_to_mqtt "1"
         else
             publish_to_mqtt "0"
         fi
-    done
-}
-
-# Start monitoring topics
-monitor_topics
-
-
+    fi
+done
 
 
 
