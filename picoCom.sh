@@ -22,11 +22,12 @@ TRIGGER_MESSAGE="doPump"
 
 SERIAL_PORT="/dev/ttyACM0"
 
-
+PLANTS_WATER_ALARM=0
+PUMP_WATER_ALARM=0
 
 # Connect to MQTT broker
 mosquitto_sub -h $MQTT_HOST -p $MQTT_PORT -u $MQTT_USER -P $MQTT_PASS -t $TOPIC_5 | while read -r MESSAGE; do
-  if [ "$MESSAGE" == "$TRIGGER_MESSAGE" ]; then
+  if [ "$MESSAGE" == "$TRIGGER_MESSAGE" ] && [ "$PLANTS_WATER_ALARM" != "1" ] && [ "$PUMP_WATER_ALARM" != "1" ]; then
     echo "p" > $SERIAL_PORT
   fi
 done &
@@ -38,6 +39,9 @@ while true; do
   LINE=$(echo "$LINE" | tr -d '[:space:]')
   
   VALUES=($(echo $LINE | tr "," "\n"))
+  
+  PLANTS_WATER_ALARM="${VALUES[0]}"
+  PUMP_WATER_ALARM="${VALUES[1]}"
   
   
   mosquitto_pub -h $MQTT_HOST -p $MQTT_PORT -u $MQTT_USER -P $MQTT_PASS -t $TOPIC_1 -m "${VALUES[0]}"
