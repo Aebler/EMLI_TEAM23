@@ -5,5 +5,5 @@
 while true
 do
     /home/pi/scripts/doSendPump.sh    # Replace this with the path to your actual script.
-    sleep 4                # Sleep for 12 hours.
+    sleep 40                # Sleep for 12 hours.
 done
