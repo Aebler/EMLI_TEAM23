@@ -25,7 +25,7 @@ def pump_request():
     select_result = uselect.select([stdin], [], [], 0)
     while select_result[0]:
         ch = stdin.read(1)
-        if ch == 'p':
+        if ch == '1':
             result = True
         select_result = uselect.select([stdin], [], [], 0)
     return result
@@ -35,6 +35,7 @@ while True:
         pump_control.high()
         utime.sleep(1)
         pump_control.low()
+        #print("Pumping")
     else:
         utime.sleep(1)
     print("%d,%d,%.0f,%.0f" % (plant_water_alarm.value(), pump_water_alarm.value(), moisture(),
