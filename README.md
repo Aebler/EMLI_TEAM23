@@ -8,6 +8,9 @@ SSH_PASS : "raspberry"
 MQQT_ID  : "emli23"
 MQQT_PASS: "bonk22bonk"
 
+Grafana_username: "admin"
+Grafana_password: "admin"
+
 This GitHub repository for group 23 contains the scripts and programs created during the project.
 
 It has three overall sections.
